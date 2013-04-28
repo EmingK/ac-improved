@@ -1338,23 +1338,6 @@ that have been made before in this function."
         (setq ac-show-menu t)
         string))))
 
-(defun ac-expand-next ()
-  "Try expand, and if expanded twice, select next candidate."
-  (interactive)
-  (unless (ac-expand-common)
-    (let ((string (ac-selected-candidate)))
-      (when string
-        (when (equal ac-prefix string)
-          (ac-next)
-          (setq string (ac-selected-candidate)))
-        ;;(ac-expand-string string (eq last-command this-command))
-        ;; Do reposition if menu at long line
-        (if (and (> (popup-direction ac-menu) 0)
-                 (ac-menu-at-wrapper-line-p))
-            (ac-reposition))
-        (setq ac-show-menu t)
-        string))))
-
 (defun ac-linefeed-filter ()
   "filter what to do when 'enter' pressed."
   (interactive)
