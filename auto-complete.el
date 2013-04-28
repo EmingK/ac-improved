@@ -351,7 +351,7 @@ If there is no common part, this will be nil.")
 (defvar ac-completing-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\t" 'ac-expand)
-    ;;(define-key map "\r" 'ac-complete)
+    (define-key map "\r" 'ac-linefeed-filter)
     (define-key map (kbd "M-TAB") 'auto-complete)
     (define-key map "\C-s" 'ac-isearch)
 
@@ -1354,6 +1354,18 @@ that have been made before in this function."
             (ac-reposition))
         (setq ac-show-menu t)
         string))))
+
+(defun ac-linefeed-filter ()
+  "filter what to do when 'enter' pressed."
+  (interactive)
+  (let ((string (ac-selected-candidate)))
+    (when string
+      (if (equal ac-prefix string)
+	  ()
+	(insert-string "\n")
+	)
+      (ac-menu-delete)
+      )))
 
 (defun hk-expand (ac-move)
   "Try expand, and if expanded twice, select next candidate."
