@@ -351,14 +351,14 @@ If there is no common part, this will be nil.")
 (defvar ac-completing-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\t" 'ac-expand)
-    (define-key map "\r" 'ac-complete)
+    ;;(define-key map "\r" 'ac-complete)
     (define-key map (kbd "M-TAB") 'auto-complete)
     (define-key map "\C-s" 'ac-isearch)
 
     (define-key map "\M-n" 'ac-next)
     (define-key map "\M-p" 'ac-previous)
-    (define-key map [down] 'ac-next)
-    (define-key map [up] 'ac-previous)
+    (define-key map [down] 'ac-expand-next)
+    (define-key map [up] 'ac-expand-previous)
 
     (define-key map [f1] 'ac-help)
     (define-key map [M-f1] 'ac-persist-help)
@@ -1320,6 +1320,58 @@ that have been made before in this function."
             (ac-reposition))
         (setq ac-show-menu t)
         string))))
+
+(defun ac-expand-previous ()
+  "Try expand, and if expanded twice, select next candidate."
+  (interactive)
+  (unless (ac-expand-common)
+    (let ((string (ac-selected-candidate)))
+      (when string
+        (when (equal ac-prefix string)
+          (ac-previous)
+          (setq string (ac-selected-candidate)))
+        (ac-expand-string string (eq last-command this-command))
+        ;; Do reposition if menu at long line
+        (if (and (> (popup-direction ac-menu) 0)
+                 (ac-menu-at-wrapper-line-p))
+            (ac-reposition))
+        (setq ac-show-menu t)
+        string))))
+
+(defun ac-expand-next ()
+  "Try expand, and if expanded twice, select next candidate."
+  (interactive)
+  (unless (ac-expand-common)
+    (let ((string (ac-selected-candidate)))
+      (when string
+        (when (equal ac-prefix string)
+          (ac-next)
+          (setq string (ac-selected-candidate)))
+        (ac-expand-string string (eq last-command this-command))
+        ;; Do reposition if menu at long line
+        (if (and (> (popup-direction ac-menu) 0)
+                 (ac-menu-at-wrapper-line-p))
+            (ac-reposition))
+        (setq ac-show-menu t)
+        string))))
+
+(defun hk-expand (ac-move)
+  "Try expand, and if expanded twice, select next candidate."
+  (interactive)
+  (unless (ac-expand-common)
+    (let ((string (ac-selected-candidate)))
+      (when string
+        (when (equal ac-prefix string)
+          (ac-move)
+          (setq string (ac-selected-candidate)))
+        (ac-expand-string string (eq last-command this-command))
+        ;; Do reposition if menu at long line
+        (if (and (> (popup-direction ac-menu) 0)
+                 (ac-menu-at-wrapper-line-p))
+            (ac-reposition))
+        (setq ac-show-menu t)
+        string))))
+
 
 (defun ac-expand-common ()
   "Try to expand meaningful common part."
