@@ -1330,7 +1330,7 @@ that have been made before in this function."
         (when (equal ac-prefix string)
           (ac-previous)
           (setq string (ac-selected-candidate)))
-        (ac-expand-string string (eq last-command this-command))
+        ;;(ac-expand-string string (eq last-command this-command))
         ;; Do reposition if menu at long line
         (if (and (> (popup-direction ac-menu) 0)
                  (ac-menu-at-wrapper-line-p))
@@ -1347,7 +1347,7 @@ that have been made before in this function."
         (when (equal ac-prefix string)
           (ac-next)
           (setq string (ac-selected-candidate)))
-        (ac-expand-string string (eq last-command this-command))
+        ;;(ac-expand-string string (eq last-command this-command))
         ;; Do reposition if menu at long line
         (if (and (> (popup-direction ac-menu) 0)
                  (ac-menu-at-wrapper-line-p))
@@ -1358,13 +1358,21 @@ that have been made before in this function."
 (defun ac-linefeed-filter ()
   "filter what to do when 'enter' pressed."
   (interactive)
-  (if (= 0 (popup-cursor ac-menu))
-      (progn 
-	(ac-abort)
-	(insert-string "\n")
-	)
-    (ac-complete)
-    )
+  (unless (ac-expand-common)
+    (let ((string (ac-selected-candidate)))
+      (when string
+        (if (equal ac-prefix string)
+	    ()
+	  (insert-string "\n")
+	  )
+	(ac-abort))))
+  ;; (if (= 0 (popup-cursor ac-menu))
+  ;;     (progn 
+  ;; 	(ac-abort)
+  ;; 	(insert-string "\n")
+  ;; 	)
+  ;;   (ac-complete)
+  ;;   )
   )
 
 (defun ac-expand-common ()
