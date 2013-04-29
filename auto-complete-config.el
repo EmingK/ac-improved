@@ -141,7 +141,7 @@
 
 (defun ac-yasnippet-candidates ()
   (with-no-warnings
-    (if (fboundp 'yas/get-snippet-tables)
+    (if (fboundp 'yas--get-snippet-tables)
         ;; >0.6.0
         (apply 'append (mapcar 'ac-yasnippet-candidate-1 (yas/get-snippet-tables major-mode)))
       (let ((table

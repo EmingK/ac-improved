@@ -355,8 +355,8 @@ If there is no common part, this will be nil.")
     (define-key map (kbd "M-TAB") 'auto-complete)
     (define-key map "\C-s" 'ac-isearch)
 
-    (define-key map "\M-n" 'ac-next)
-    (define-key map "\M-p" 'ac-previous)
+    (define-key map "\M-n" 'ac-expand-next)
+    (define-key map "\M-p" 'ac-expand-previous)
     (define-key map [down] 'ac-next)
     (define-key map [up] 'ac-previous)
 
@@ -1330,7 +1330,7 @@ that have been made before in this function."
         (when (equal ac-prefix string)
           (ac-previous)
           (setq string (ac-selected-candidate)))
-        ;;(ac-expand-string string (eq last-command this-command))
+        (ac-expand-string string (eq last-command this-command))
         ;; Do reposition if menu at long line
         (if (and (> (popup-direction ac-menu) 0)
                  (ac-menu-at-wrapper-line-p))
@@ -1347,7 +1347,7 @@ that have been made before in this function."
         (when (equal ac-prefix string)
           (ac-next)
           (setq string (ac-selected-candidate)))
-        ;;(ac-expand-string string (eq last-command this-command))
+        (ac-expand-string string (eq last-command this-command))
         ;; Do reposition if menu at long line
         (if (and (> (popup-direction ac-menu) 0)
                  (ac-menu-at-wrapper-line-p))
@@ -1358,7 +1358,7 @@ that have been made before in this function."
 (defun ac-linefeed-filter ()
   "filter what to do when 'enter' pressed."
   (interactive)
-  (unless (ac-expand-common)
+;;  (unless (ac-expand-common)
     (let ((string (ac-selected-candidate)))
       (when string
         (if (equal ac-prefix string)
@@ -1373,7 +1373,7 @@ that have been made before in this function."
   ;; 	)
   ;;   (ac-complete)
   ;;   )
-  )
+;;  )
 
 (defun ac-expand-common ()
   "Try to expand meaningful common part."
