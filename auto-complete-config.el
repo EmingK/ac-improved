@@ -101,6 +101,15 @@
 
 ;; yasnippet
 
+;;;some other functions may call the functions while
+;;;their names' been changed
+(require 'yasnippet)
+(defun yas/current-snippet-table ()
+  (yas--get-snippet-tables))
+
+(defun yas/snippet-table-hash (table)
+  (yas--table-hash (yas--make-snippet-table table)))
+
 (defface ac-yasnippet-candidate-face
   '((t (:background "sandybrown" :foreground "black")))
   "Face for yasnippet candidate."
