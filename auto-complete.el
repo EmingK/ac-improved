@@ -357,8 +357,8 @@ If there is no common part, this will be nil.")
 
     (define-key map "\M-n" 'ac-expand-next)
     (define-key map "\M-p" 'ac-expand-previous)
-    (define-key map [down] 'ac-expand-next)
-    (define-key map [up] 'ac-expand-previous)
+    (define-key map [down] 'ac-next)
+    (define-key map [up] 'ac-previous)
 
     (define-key map [f1] 'ac-help)
     (define-key map [M-f1] 'ac-persist-help)
@@ -1011,7 +1011,8 @@ You can not use it in source definition like (prefix . `NAME')."
         ac-compiled-sources nil
         ac-current-sources nil
         ac-current-prefix-def nil
-        ac-ignoring-prefix-def nil))
+        ac-ignoring-prefix-def nil
+	ac-selection-changed nil))
 
 (defsubst ac-abort ()
   "Abort completion."
@@ -1292,6 +1293,7 @@ that have been made before in this function."
   (when (ac-menu-live-p)
     (popup-next ac-menu)
     (setq ac-show-menu t)
+    (setq ac-selection-changed t)
     (if (eq this-command 'ac-next)
         (setq ac-dwim-enable t))))
 
@@ -1301,6 +1303,7 @@ that have been made before in this function."
   (when (ac-menu-live-p)
     (popup-previous ac-menu)
     (setq ac-show-menu t)
+    (setq ac-selection-changed t)
     (if (eq this-command 'ac-previous)
         (setq ac-dwim-enable t))))
 
@@ -1361,10 +1364,11 @@ that have been made before in this function."
 ;;  (unless (ac-expand-common)
     (let ((string (ac-selected-candidate)))
       (when string
-        (if (equal ac-prefix string)
-	    ()
+	(when (not (equal ac-prefix string))
+        (if ac-selection-changed
+	    (ac-complete)
 	  (insert-string "\n")
-	  )
+	  ))
 	(ac-abort))))
   ;; (if (= 0 (popup-cursor ac-menu))
   ;;     (progn 
