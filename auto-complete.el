@@ -1341,7 +1341,7 @@ that have been made before in this function."
 (defun ac-linefeed-filter ()
   "filter what to do when 'enter' pressed."
   (interactive)
-  (unless (ac-expand-common)
+;;  (unless (ac-expand-common)
     (let ((string (ac-selected-candidate)))
       (when string
         (if (equal ac-prefix string)
@@ -1356,7 +1356,7 @@ that have been made before in this function."
   ;; 	)
   ;;   (ac-complete)
   ;;   )
-  )
+;;  )
 
 (defun ac-expand-common ()
   "Try to expand meaningful common part."
