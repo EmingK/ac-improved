@@ -240,7 +240,7 @@ a prefix doen't contain any upper case letters."
   :type 'boolean
   :group 'auto-complete)
 
-(defcustom ac-use-overriding-local-map nil
+(defcustom ac-use-overriding-local-map t
   "Non-nil means `overriding-local-map' will be used to hack for overriding key events on auto-copletion."
   :type 'boolean
   :group 'auto-complete)
