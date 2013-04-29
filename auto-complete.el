@@ -357,8 +357,8 @@ If there is no common part, this will be nil.")
 
     (define-key map "\M-n" 'ac-expand-next)
     (define-key map "\M-p" 'ac-expand-previous)
-    (define-key map [down] 'ac-next)
-    (define-key map [up] 'ac-previous)
+    (define-key map [down] 'ac-expand-next)
+    (define-key map [up] 'ac-expand-previous)
 
     (define-key map [f1] 'ac-help)
     (define-key map [M-f1] 'ac-persist-help)
